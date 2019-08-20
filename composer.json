@@ -1,0 +1,32 @@
+{
+    "name": "kalesh13/z-auth",
+    "description": "Simple authentication library for Laravel",
+    "keywords": ["z-auth", "auth", "passport", "laravel"],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^7.1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zauth\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zauth\\ZauthServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
