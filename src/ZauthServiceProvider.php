@@ -11,7 +11,9 @@ class ZauthServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->commands(ZclientCommand::class);
+        if ($this->app->runningInConsole()) {
+            $this->commands(ZclientCommand::class);
+        }
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
