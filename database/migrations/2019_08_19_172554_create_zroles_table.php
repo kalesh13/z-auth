@@ -16,7 +16,8 @@ class CreateZrolesTable extends Migration
         Schema::create('zroles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
-            $table->integer('role')->default(0);
+            $table->string('role', 100)->default('Customer');
+            $table->integer('score')->default(0);
             $table->timestamps();
 
             $table->unique(['user_id', 'role']);

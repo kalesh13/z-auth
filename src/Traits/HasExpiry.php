@@ -21,6 +21,8 @@ trait HasExpiry
     public function expire()
     {
         $this->setExpiry(0);
+
+        $this->save();
     }
 
     /**

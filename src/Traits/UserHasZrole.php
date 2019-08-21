@@ -2,6 +2,7 @@
 
 namespace Zauth\Traits;
 
+use Exception;
 use Zauth\Zrole;
 
 trait UserHasZrole
@@ -26,6 +27,42 @@ trait UserHasZrole
     public function role()
     {
         return $this->hasOne(Zrole::class);
+    }
+
+    /**
+     * Assign a role to this user
+     * 
+     * @param string $role_name
+     * @return bool
+     */
+    public function assignRole($role_name)
+    {
+        if (empty($this->role_scores)) {
+            throw new Exception('No roles defined. Define some roles before assigning one to user.');
+        }
+
+        $role = $this->role;
+
+        if (!$role) {
+            $role = new Zrole();
+        }
+        // If the specified role_name is defined, use the role_name
+        // and its corresponding score.
+        if (isset($this->role_scores[$role_name])) {
+            $role->role = $role_name;
+            $role->score = $this->role_scores[$role_name];
+        }
+        // If the specified role_name is not found in the
+        // $role_scores array, we will find the smallest score
+        // and use that key and value for the new zrole.
+        else {
+            $min_key = array_keys($this->role_scores, min($this->role_scores))[0];
+
+            $role->role = $min_key;
+            $role->score = $this->role_scores[$min_key];
+        }
+
+        return $this->role()->save($role);
     }
 
     /**
@@ -55,19 +92,6 @@ trait UserHasZrole
     }
 
     /**
-     * Return the name of the role for a score.
-     * 
-     * @param int
-     * @return string
-     */
-    public function getRoleName($score)
-    {
-        $flipped_array = array_flip($this->role_scores);
-
-        return $flipped_array[$score] ?? 'n/a';
-    }
-
-    /**
      * Checks whether the user is an administrator or not.
      * 
      * @return bool
@@ -80,15 +104,15 @@ trait UserHasZrole
     /**
      * Check whether the user has a role
      * 
-     * @param string $role
+     * @param string $role_name
      * @return bool
      */
-    public function hasRole($role)
+    public function hasRole($role_name)
     {
-        if ($role && in_array($role, array_keys($this->role_scores))) {
+        if ($role_name && in_array($role_name, array_keys($this->role_scores))) {
             // minimum score required for the $user_role to
             // return true.
-            $req_role_score = $this->role_scores[$role];
+            $req_role_score = $this->role_scores[$role_name];
             /**
              * Zrole of the user.
              * @var Zrole $user_role 
