@@ -13,7 +13,7 @@ class CreateZrolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('z_roles', function (Blueprint $table) {
+        Schema::create('zroles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
             $table->integer('role')->default(0);
@@ -30,6 +30,6 @@ class CreateZrolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('z_roles');
+        Schema::dropIfExists('zroles');
     }
 }

@@ -13,7 +13,7 @@ class CreateZtokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('z_tokens', function (Blueprint $table) {
+        Schema::create('ztokens', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('client_id');
             $table->bigInteger('user_id')->nullable()->index();
@@ -31,6 +31,6 @@ class CreateZtokensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('z_tokens');
+        Schema::dropIfExists('ztokens');
     }
 }

@@ -33,7 +33,7 @@ class ClientController
 
     private function validationFailed($name)
     {
-        $validator = Validator::make(['name' => $name], ['name' => 'required|unique:z_clients']);
+        $validator = Validator::make(['name' => $name], ['name' => 'required|unique:zclients']);
 
         return $validator->fails() ? $validator->failed() : [];
     }
