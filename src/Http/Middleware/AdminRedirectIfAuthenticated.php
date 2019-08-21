@@ -1,13 +1,13 @@
 <?php
 
-namespace Zauth\Http\Middlewares;
+namespace Zauth\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAuth
+class AdminRedirectIfAuthenticated
 {
-    /**
+     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
@@ -18,12 +18,11 @@ class AdminAuth
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        
-        if (!$user || !$user->isAdministrator()) {
-            return $request->expectsJson()
-                ? response()->json(['message' => 'User not authenticated'], 401)
-                : redirect()->guest(route('admin.login', ['redirectTo' => url()->current()]));
+
+        if ($user && $user->isAdministrator()) {
+            return redirect('/admin');
         }
+
         return $next($request);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zauth\Http\Middlewares;
+namespace Zauth\Http\Middleware;
 
 use Closure;
 
