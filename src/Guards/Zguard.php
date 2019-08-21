@@ -260,9 +260,8 @@ class Zguard implements StatefulGuard
         if (!is_null($this->user)) {
             // Expire the current request token if the user has
             // function expireToken which is part of UserHasZtoken trait
-            if (method_exists($user, 'expireToken')) {
-                $user->expireToken($this->getZtokenFromRequest($this->request));
-            }
+            $user->expireToken($this->getZtokenFromRequest($this->request));
+
             $this->cycleRememberToken($user, $this->provider);
         }
 

@@ -90,8 +90,12 @@ trait HasZtokens
 
             // If a value is set for $id, store the access_token
             // in the cache along with the user.
-            if (isset($id)) {
-                return $this->storeInCache($token, $provider->retrieveById($id));
+            if (isset($id) && $user = $provider->retrieveById($id)) {
+                // Set the accessToken as current_token of the
+                // user. Function part of UserHasZtokens trait.
+                $user->setCurrentToken($accessToken);
+
+                return $this->storeInCache($token, $user);
             }
         }
         return null;

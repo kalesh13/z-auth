@@ -38,7 +38,7 @@ trait GrantsToken
         // generatesToken is a function defined in the trait UserHasZtokens.
         // If any project uses this library, the \App\User model should use this
         // trait.
-        if ($user && method_exists($user, 'generateToken')) {
+        if ($user) {
             return $user->generateToken($request, $client);
         }
     }
