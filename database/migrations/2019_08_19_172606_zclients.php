@@ -15,9 +15,10 @@ class CreateZclientsTable extends Migration
     {
         Schema::create('z_clients', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->nullable();
             $table->string('name')->unique();
             $table->string('client_id', 32)->unique();
-            $table->string('client_secret', 64)->unique();
+            $table->string('client_secret', 64)->nullable();
             $table->timestamps();
         });
     }
