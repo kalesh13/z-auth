@@ -13,7 +13,7 @@ class CreateZclientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('z_clients', function (Blueprint $table) {
+        Schema::create('zclients', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->nullable();
             $table->string('name')->unique();
