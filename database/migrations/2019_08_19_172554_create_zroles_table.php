@@ -13,7 +13,7 @@ class CreateZrolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('zroles', function (Blueprint $table) {
+        Schema::create('z_roles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
             $table->integer('role')->default(0);
