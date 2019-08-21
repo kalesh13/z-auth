@@ -3,6 +3,7 @@
 namespace Zauth\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
@@ -16,13 +17,15 @@ class CheckRole
      */
     public function handle($request, Closure $next, ...$roles)
     {
-        $user = $request->user();
+        $user = Auth::user();
 
-        foreach ($roles as $role) {
-            // If the user have a role as defined in the $roles,
-            // proceed to the next closure.
-            if ($user->hasRole($role)) {
-                return $next($request);
+        if ($user) {
+            foreach ($roles as $role) {
+                // If the user have a role as defined in the $roles,
+                // proceed to the next closure.
+                if ($user->hasRole($role)) {
+                    return $next($request);
+                }
             }
         }
         return $request->expectsJson()
