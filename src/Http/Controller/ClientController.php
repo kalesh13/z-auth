@@ -16,9 +16,10 @@ class ClientController
      * by the application.
      * 
      * @param string $name
+     * @param bool $needs_secret
      * @return Zclient
      */
-    public function create(string $name)
+    public function create(string $name, $needs_secret = true)
     {
         if ($errors = $this->validationFailed($name)) {
             throw new ClientCreateException($errors['name'][0]);
@@ -26,7 +27,7 @@ class ClientController
         $client = new Zclient();
         $client->name = $name;
         $client->client_id = Str::random(30);
-        $client->client_secret = Str::random(60);
+        $client->client_secret = $needs_secret ? Str::random(60) : null;
 
         return $client;
     }

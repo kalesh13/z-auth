@@ -46,7 +46,7 @@ class ZclientCommand extends Command
             return;
         }
         try {
-            $client = (new ClientController())->create($name);
+            $client = (new ClientController())->create($name, false);
 
             if ($client->save()) {
                 $this->info("Client $name created successfully. Save the credentials safely");
