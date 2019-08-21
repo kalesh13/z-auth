@@ -4,12 +4,15 @@ namespace Zauth;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use Zauth\Commands\ZclientCommand;
 use Zauth\Guards\Zguard;
 
 class ZauthServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->commands(ZclientCommand::class);
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         Auth::extend('zauth', function ($app, $name, array $config) {
