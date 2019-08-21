@@ -15,7 +15,7 @@ class Zrole extends ZModels
      * 
      * @return int|null
      */
-    public function getRole()
+    public function score()
     {
         return $this->role;
     }

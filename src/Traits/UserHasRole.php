@@ -98,7 +98,7 @@ trait UserHasRole
              * User has a role if the score of the $user_role is greater
              * than or equal to the $req_role_score
              */
-            return $user_role && ($user_role->getRole() >= $req_role_score);
+            return $user_role && ($user_role->score() >= $req_role_score);
         }
         return false;
     }
