@@ -18,25 +18,25 @@ trait HasCookies
     /**
      * Set the recaller cookie for response.
      *
-     * @param Cookie $cookie
+     * @param string $name
+     * @param string $value
      */
-    public function queueRecallerCookie(Cookie $cookie)
+    public function queueRecallerCookie($name, $value)
     {
-        $this->getCookieJar()->queue($cookie);
+        $this->getCookieJar()->queue(
+            $this->getCookieJar()->forever($name, $value)
+        );
     }
 
     /**
      * Set the cookie for response.
      *
-     * @param Cookie|string $name
+     * @param string $name
      * @param string $value
      * @param int $expiry
      */
     public function queueCookie($name, $value, $expiry)
     {
-        if ($name instanceof Cookie) {
-            return $this->getCookieJar()->queue($name);
-        }
         $this->getCookieJar()->queue(
             $this->getCookieJar()->make($name, $value, $expiry)
         );

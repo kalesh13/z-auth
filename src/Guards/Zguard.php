@@ -70,22 +70,22 @@ class Zguard implements StatefulGuard
             return $this->user;
         }
 
-        // At this point we have to find the user using the token
-        // from the request
-        $token = $this->getTokenFromRequest($this->request);
-
-        if (!empty($token)) {
-            $this->user = $this->userFromToken($this->provider, $token);
-        }
-
         // If the user is null, but we decrypt a "recaller" cookie we can attempt to
         // pull the user data on that cookie which serves as a remember cookie on
         // the application. Once we have a user we can return it to the caller.
-        if (is_null($this->user)) {
-            $this->user = $this->getUserFromRemember($this->request, $this->provider);
+        $this->user = $this->getUserFromRemember($this->request, $this->provider);
 
-            if ($this->user) {
-                $this->setUser($this->user);
+        if ($this->user) {
+            $this->setUser($this->user);
+        }
+
+        // At this point we have to find the user using the token
+        // from the request
+        if (is_null($this->user)) {
+            $token = $this->getTokenFromRequest($this->request);
+
+            if (!empty($token)) {
+                $this->user = $this->userFromToken($this->provider, $token);
             }
         }
         return $this->user;
@@ -99,8 +99,6 @@ class Zguard implements StatefulGuard
      */
     public function setUser(Authenticatable $user)
     {
-        $this->queueLoginCookie($this->userActiveToken($user));
-
         $this->user = $user;
 
         $this->loggedOut = false;
@@ -180,13 +178,13 @@ class Zguard implements StatefulGuard
      */
     public function login(Authenticatable $user, $remember = false)
     {
-        $z_token = $this->getZtokenFromRequest($this->request);
-
         $token = $this->grantToken($this->request, $user);
 
-        if (!($token = $this->grantToken($this->request, $user))) {
+        if (!$token) {
             return;
         }
+        // Queue the login cookie
+        $this->queueCookie($this->getTokenName(), $token->token(), $token->getExpiryMinutes());
 
         // If the user should be permanently "remembered" by the application we will
         // queue a permanent cookie that contains the encrypted copy of the user
@@ -195,10 +193,8 @@ class Zguard implements StatefulGuard
             $this->ensureRememberTokenIsSet($user, $this->provider);
 
             $this->queueRecallerCookie(
-                $this->getCookieJar()->forever(
-                    $this->getRecallerName(),
-                    $this->getRecallerCookieValue($user)
-                )
+                $this->getRecallerName(),
+                $this->getRecallerCookieValue($user)
             );
         }
         $this->setUser($user);
@@ -253,5 +249,44 @@ class Zguard implements StatefulGuard
      * @return void
      */
     public function logout()
-    { }
+    {
+        $user = $this->user();
+
+        // If we have an event dispatcher instance, we can fire off the logout event
+        // so any further processing can be done. This allows the developer to be
+        // listening for anytime a user signs out of this application manually.
+        $this->clearUserDataFromStorage();
+
+        if (!is_null($this->user)) {
+            // Expire the current request token if the user has
+            // function expireToken which is part of UserHasZtoken trait
+            if (method_exists($user, 'expireToken')) {
+                $user->expireToken($this->getZtokenFromRequest($this->request));
+            }
+            $this->cycleRememberToken($user, $this->provider);
+        }
+
+        // Once we have fired the logout event we will clear the users out of memory
+        // so they are no longer available as the user is no longer considered as
+        // being signed into this application and should not be available here.
+        $this->user = null;
+
+        $this->loggedOut = true;
+    }
+
+    /**
+     * Remove the user data from the cookies.
+     *
+     * @return void
+     */
+    protected function clearUserDataFromStorage()
+    {
+        if (!is_null($this->hasToken($this->request))) {
+            $this->getCookieJar()->queue($this->getCookieJar()->forget($this->getTokenName()));
+        }
+
+        if (!is_null($this->recaller($this->request))) {
+            $this->getCookieJar()->queue($this->getCookieJar()->forget($this->getRecallerName()));
+        }
+    }
 }

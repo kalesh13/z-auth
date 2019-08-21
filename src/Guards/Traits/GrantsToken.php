@@ -5,6 +5,7 @@ namespace Zauth\Guards\Traits;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Zauth\Zclient;
+use Zauth\Ztoken;
 
 trait GrantsToken
 {

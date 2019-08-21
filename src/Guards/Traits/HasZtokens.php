@@ -81,10 +81,9 @@ trait HasZtokens
          * get the token details from the database.
          * @var Ztoken $accessToken
          */
-        $accessToken = Ztoken::where(Ztoken::TOKEN_COLUMN, $token)
-            ->where('expiry', '>', Carbon::now())->first();
+        $accessToken = Ztoken::where(Ztoken::TOKEN_COLUMN, $token)->first();
 
-        if (!empty($accessToken)) {
+        if (!empty($accessToken) && !$accessToken->hasExpired()) {
             // Gets the user_id of the token. getUserId function
             // is part of a trait IsOfUser, which Ztoken must use.
             $id = $accessToken->getUserId();
@@ -128,7 +127,7 @@ trait HasZtokens
      * Get the decrypted token cookie for the request.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Auth\Recaller|null
+     * @return string
      */
     public function hasToken(Request $request)
     {
