@@ -4,7 +4,7 @@ namespace Zauth\Traits;
 
 use Zauth\Zrole;
 
-trait UserHasRole
+trait UserHasZrole
 {
     /**
      * Holds the role score for each role. Administrator is
