@@ -101,6 +101,16 @@ trait UserHasZtokens
     }
 
     /**
+     * Gets the current token of this user.
+     * 
+     * @return Ztoken
+     */
+    public function activeToken()
+    {
+        return $this->current_token;
+    }
+
+    /**
      * Generates a token for this user and the specified client.
      * 
      * @param \Illuminate\Http\Request $request
