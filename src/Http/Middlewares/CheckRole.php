@@ -20,9 +20,11 @@ class CheckRole
 
         foreach ($roles as $role) {
             // If the user don't have a role as defined in the $roles,
-            // redirect the user to homepage
+            // redirect the user to login
             if (!$user->hasRole($role)) {
-                return redirect('/');
+                return $request->expectsJson()
+                ? response()->json(['message' => 'Not authorized to access this section'], 403)
+                : abort(403);
             }
         }
         return $next($request);
