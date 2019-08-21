@@ -13,9 +13,8 @@ class ZauthServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands(ZclientCommand::class);
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         }
-
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         Auth::extend('zauth', function ($app, $name, array $config) {
             return new Zguard(
