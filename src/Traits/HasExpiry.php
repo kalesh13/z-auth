@@ -53,7 +53,7 @@ trait HasExpiry
      */
     public function getExpiryMinutes()
     {
-        $expiryInMinutes = Carbon::parse($this->expiry)->diffInRealMinutes(Carbon::now());
+        $expiryInMinutes = Carbon::now()->diffInRealMinutes(Carbon::parse($this->expiry), false);
 
         if ($expiryInMinutes > 0) {
             return $expiryInMinutes;
@@ -70,7 +70,7 @@ trait HasExpiry
      */
     public function hasExpired()
     {
-        $ttl_difference = Carbon::parse($this->expiry)->diffInRealSeconds(Carbon::now());
+        $ttl_difference = Carbon::now()->diffInRealSeconds(Carbon::parse($this->expiry), false);
 
         return $ttl_difference <= 0;
     }
