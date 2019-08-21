@@ -111,6 +111,23 @@ trait UserHasZtokens
     }
 
     /**
+     * Check whether the active token is authorized via
+     * the given client.
+     * 
+     * @param string $client_name
+     * @return bool
+     */
+    public function authorizedViaClient($client_name)
+    {
+        if ($token = $this->activeToken()) {
+            $client = $token->client;
+
+            return $client && ($client_name === $client->getClientName());
+        }
+        return false;
+    }
+
+    /**
      * Generates a token for this user and the specified client.
      * 
      * @param \Illuminate\Http\Request $request

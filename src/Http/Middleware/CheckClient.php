@@ -2,11 +2,11 @@
 
 namespace Zauth\Http\Middleware;
 
-use Closure;
+use Illuminate\Support\Facades\Auth;
 
-class CheckRole
+class CheckClient
 {
-    /**
+     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
@@ -14,14 +14,14 @@ class CheckRole
      * @param array $roles
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$roles)
+    public function handle($request, Closure $next, ...$clients)
     {
-        $user = $request->user();
+        $user = Auth::user();
 
-        foreach ($roles as $role) {
-            // If the user have a role as defined in the $roles,
+        foreach ($clients as $client) {
+            // If the user logged in through client $client,
             // proceed to the next closure.
-            if ($user->hasRole($role)) {
+            if ($user->authorizedViaClient($client)) {
                 return $next($request);
             }
         }

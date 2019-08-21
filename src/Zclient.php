@@ -32,4 +32,14 @@ class Zclient extends ZModels
     {
         return $this->client_secret;
     }
+
+    /**
+     * Gets the name of this client
+     * 
+     * @return string
+     */
+    public function getClientName()
+    {
+        return $this->name;
+    }
 }
