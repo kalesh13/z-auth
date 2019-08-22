@@ -19,6 +19,8 @@ class CreateZclientsTable extends Migration
             $table->string('name')->unique();
             $table->string('client_id', 32)->unique();
             $table->string('client_secret', 64)->nullable();
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }
