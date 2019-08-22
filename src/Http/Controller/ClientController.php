@@ -36,6 +36,6 @@ class ClientController
     {
         $validator = Validator::make(['name' => $name], ['name' => 'required|unique:zclients']);
 
-        return $validator->fails() ? $validator->failed() : [];
+        return $validator->fails() ? $validator->errors()->messages() : [];
     }
 }
