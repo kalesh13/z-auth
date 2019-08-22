@@ -38,7 +38,7 @@ class Zclient extends ZModels
      */
     public function accessTokens()
     {
-        return $this->hasMany(Ztoken::class);
+        return $this->hasMany(Ztoken::class, 'client_id');
     }
 
     /**
