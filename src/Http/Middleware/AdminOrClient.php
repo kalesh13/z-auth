@@ -5,7 +5,7 @@ namespace Zauth\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class CheckRole
+class AdminOrClient
 {
     /**
      * Handle an incoming request.
@@ -15,23 +15,21 @@ class CheckRole
      * @param array $roles
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$roles)
+    public function handle($request, Closure $next, ...$clients)
     {
         $user = Auth::user();
 
         if ($user) {
-            foreach ($roles as $role) {
-                // If the user have a role as defined in the $roles,
-                // proceed to the next closure.
-                if ($user->hasRole($role)) {
-                    return $next($request);
-                }
+            // Check if user is an admin. If true, we will proceed to 
+            // the next pipeline operation.
+            if ($user->isAdministrator()) {
+                return $next($request);
             }
-            // User is authenticated, but was not able to resolve
-            // to a specified role. Return a forbidden response in this case.
-            return $request->expectsJson()
-                ? response()->json(['message' => 'Not authorized to access this section'], 403)
-                : abort(403, 'Not authorized to access this section');
+            // User is not an administrator at this point. Check
+            // if user is authorized through any of the clients
+            // mentioned in $clients. If true, next pripeline
+            // operation is carried out.
+            return (new CheckClient())->handle($request, $next, ...$clients);
         }
         // User is not authenticated. This middleware grants access
         // only to authenticated users. Send a user unathenticated

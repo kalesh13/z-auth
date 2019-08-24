@@ -2,7 +2,6 @@
 
 namespace Zauth\Guards\Traits;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Zauth\Ztoken;
