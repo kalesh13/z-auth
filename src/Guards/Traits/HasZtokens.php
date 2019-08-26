@@ -20,7 +20,7 @@ trait HasZtokens
         $token = $this->getTokenFromRequest($request);
 
         if (!empty($token)) {
-            return Ztoken::where(Ztoken::TOKEN_COLUMN, $token)->first();
+            return $this->getZtokenFromToken($token);
         }
     }
 
@@ -80,7 +80,7 @@ trait HasZtokens
          * get the token details from the database.
          * @var Ztoken $accessToken
          */
-        $accessToken = Ztoken::where(Ztoken::TOKEN_COLUMN, $token)->first();
+        $accessToken = $this->getZtokenFromToken($token);
 
         if (!empty($accessToken) && !$accessToken->hasExpired()) {
             // Gets the user_id of the token. getUserId function
@@ -98,6 +98,30 @@ trait HasZtokens
             }
         }
         return null;
+    }
+
+    /**
+     * Gets the ztoken from token. Stored in cache as ztoken_$token.
+     * Checks cache for existance of any token and if it does not exists,
+     * add one after retreiving the same from database
+     * 
+     * @param string $token
+     * @return \Zauth\Ztoken
+     */
+    private function getZtokenFromToken($token)
+    {
+        $cache_key = 'ztoken_' . $token;
+
+        // If exists in cache, return the ztoken from
+        // cache
+        if ($ztoken = $this->retreiveFromCache($cache_key)) {
+            return $ztoken;
+        }
+        // If ztoken does not exists in cache, get the 
+        // value from database and store in cache
+        $ztoken = Ztoken::where(Ztoken::TOKEN_COLUMN, $token)->first();
+
+        return $this->storeInCache($cache_key, $ztoken);
     }
 
     /**
@@ -147,7 +171,7 @@ trait HasZtokens
      */
     public function getTokenName()
     {
-        return 'token_' . sha1(static::class);
+        return 'token_' . sha1(Ztoken::class);
     }
 
     /**
