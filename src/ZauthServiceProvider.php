@@ -2,10 +2,10 @@
 
 namespace Zauth;
 
+use Zauth\Guards\Zguard;
+use Zauth\Commands\ZclientCommand;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use Zauth\Commands\ZclientCommand;
-use Zauth\Guards\Zguard;
 
 class ZauthServiceProvider extends ServiceProvider
 {

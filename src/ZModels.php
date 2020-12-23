@@ -2,8 +2,8 @@
 
 namespace Zauth;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\Model;
 
 class ZModels extends Model
 {

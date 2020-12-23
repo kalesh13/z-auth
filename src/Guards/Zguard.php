@@ -2,20 +2,24 @@
 
 namespace Zauth\Guards;
 
-use Illuminate\Auth\GuardHelpers;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Illuminate\Http\Request;
-use Zauth\Guards\Traits\GrantsToken;
+use Illuminate\Auth\GuardHelpers;
+use Zauth\Guards\Traits\HasZtokens;
 use Zauth\Guards\Traits\HasCookies;
 use Zauth\Guards\Traits\HasRemember;
-use Zauth\Guards\Traits\HasZtokens;
+use Zauth\Guards\Traits\GrantsToken;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 
 class Zguard implements StatefulGuard
 {
-    use GuardHelpers, HasCookies, HasRemember, HasZtokens, GrantsToken;
+    use HasCookies;
+    use HasZtokens;
+    use HasRemember;
+    use GrantsToken;
+    use GuardHelpers;
 
     /**
      * The user we last attempted to retrieve.
@@ -178,7 +182,9 @@ class Zguard implements StatefulGuard
      */
     public function login(Authenticatable $user, $remember = false)
     {
-        $token = $this->grantToken($this->request, $user);
+        $data = collect($this->request->all())->merge(['ip' => $this->request->ip()]);
+
+        $token = $this->grantToken($data, $user);
 
         if (!$token) {
             return;

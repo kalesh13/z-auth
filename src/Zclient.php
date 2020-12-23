@@ -2,8 +2,8 @@
 
 namespace Zauth;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Zauth\Traits\IsOfUser;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Zclient uses soft-delete, so that we can track which api
