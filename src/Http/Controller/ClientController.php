@@ -2,10 +2,10 @@
 
 namespace Zauth\Http\Controller;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Zauth\Http\Exceptions\ClientCreateException;
 use Zauth\Zclient;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Zauth\Http\Exceptions\ClientCreateException;
 
 class ClientController
 {

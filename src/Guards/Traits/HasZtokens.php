@@ -2,9 +2,9 @@
 
 namespace Zauth\Guards\Traits;
 
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Http\Request;
 use Zauth\Ztoken;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\UserProvider;
 
 trait HasZtokens
 {

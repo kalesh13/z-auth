@@ -3,8 +3,8 @@
 namespace Zauth\Guards\Traits;
 
 use RuntimeException;
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Symfony\Component\HttpFoundation\Cookie;
+use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 
 trait HasCookies
 {

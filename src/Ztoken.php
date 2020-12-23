@@ -2,8 +2,8 @@
 
 namespace Zauth;
 
-use Zauth\Traits\HasExpiry;
 use Zauth\Traits\IsOfUser;
+use Zauth\Traits\HasExpiry;
 
 class Ztoken extends ZModels
 {

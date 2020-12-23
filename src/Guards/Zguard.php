@@ -182,7 +182,9 @@ class Zguard implements StatefulGuard
      */
     public function login(Authenticatable $user, $remember = false)
     {
-        $token = $this->grantToken($this->request->all(), $user);
+        $data = collect($this->request->all())->merge(['ip' => $this->request->ip()]);
+
+        $token = $this->grantToken($data, $user);
 
         if (!$token) {
             return;

@@ -2,11 +2,11 @@
 
 namespace Zauth\Guards\Traits;
 
-use Illuminate\Auth\Recaller;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Recaller;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 trait HasRemember
 {
