@@ -2,8 +2,8 @@
 
 namespace Zauth\Traits;
 
-use Illuminate\Foundation\Auth\AuthenticatesUsers as BaseAuthenticateUsers;
 use Illuminate\Http\Request;
+use Zauth\Laravel\AuthenticatesUsers as BaseAuthenticateUsers;
 
 trait AuthenticatesUsers
 {

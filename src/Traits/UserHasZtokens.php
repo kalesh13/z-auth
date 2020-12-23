@@ -2,10 +2,10 @@
 
 namespace Zauth\Traits;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Zauth\Zclient;
 use Zauth\Ztoken;
+use Zauth\Zclient;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 trait UserHasZtokens
 {
@@ -130,14 +130,14 @@ trait UserHasZtokens
     /**
      * Generates a token for this user and the specified client.
      * 
-     * @param \Illuminate\Http\Request $request
-     * @param Zclient $client
-     * @return Ztoken|bool
+     * @param \Illuminate\Support\Collection $request
+     * @param \Zauth\Zclient $client
+     * @return \Zauth\Ztoken|bool
      */
-    public function generateToken(Request $request, Zclient $client)
+    public function generateToken(Collection $request, Zclient $client)
     {
         $token = new Ztoken();
-        $token->ip = $request->ip();
+        $token->ip = $request->get('ip');
         $token->token(Str::random(60));
         $token->setExpiry($this->getTokenExpiry());
 
