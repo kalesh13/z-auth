@@ -159,4 +159,14 @@ trait UserHasZtokens
         }
         return false;
     }
+
+    /**
+     * Returns the current access/api token of this user.
+     * 
+     * @return \Zauth\Ztoken|null
+     */
+    public function getAccessTokenAttribute()
+    {
+        return $this->activeToken()->makeHidden(['client_id', 'user_id', 'ip']);
+    }
 }

@@ -9,7 +9,7 @@ class Ztoken extends ZModels
 {
     use HasExpiry, IsOfUser;
 
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at', 'client'];
 
     /**
      * Column name of the token in the database
