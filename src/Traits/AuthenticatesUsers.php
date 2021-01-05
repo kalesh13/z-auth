@@ -32,10 +32,7 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        $token = $user->activeToken();
-        $token->redirectTo = $request->redirectTo;
-
-        return $token;
+        return $user->makeVisible('access_token');
     }
 
     /**
